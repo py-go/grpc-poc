@@ -17,24 +17,19 @@ package cmd
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
-	"net/http"
-	"strings"
 
 	"github.com/spf13/cobra"
-	"golang.org/x/xerrors"
 
 	pb "github.com/py-go/grpc-poc/pkg/filesvc"
+
 	"google.golang.org/grpc"
 )
 
 const (
-	port    = ":9000"
-	BaseAPI = "https://dog.ceo/api"
+	port = ":9000"
 )
 
 // server is used to implement filesvc.FileSVCServer.
@@ -42,9 +37,14 @@ type Server struct {
 	pb.UnimplementedFileSVCServer
 }
 
+// server is used to implement filesvc.FileSVCServer.
+type ServerByte struct {
+	pb.UnimplementedFileSVCServer
+}
+
 type APIResponse struct {
-	Message []string `json: "message"`
-	Status  string   `json: "status"`
+	Message string `json:"message"`
+	Status  string `json:"status"`
 }
 
 // serverCmd represents the server command
@@ -76,52 +76,68 @@ func init() {
 }
 
 // GetFileSVC implements filesvc.FileSVCServer
-func (s *Server) GetFileSVC(ctx context.Context, req *pb.FileSVCRequest) (*pb.FileSVCReply, error) {
-	res := &pb.FileSVCReply{}
+func (s *Server) GetFileSVC(ctx context.Context, req *pb.FileSVCRequest) (res *pb.FileSVCReply, err error) {
+	res = &pb.FileSVCReply{}
 
 	// Check request
 	if req == nil {
 		fmt.Println("request must not be nil")
-		return res, xerrors.Errorf("request must not be nil")
+		err = fmt.Errorf("request must not be nil")
+		return
 	}
 
 	if req.Name == "" {
-		fmt.Println("name must not be empty in the request")
-		return res, xerrors.Errorf("name must not be empty in the request")
+		err = fmt.Errorf("name must not be empty in the request")
+		return
+	}
+
+	log.Printf("Received: %v", req.GetName())
+	//Call Image API in order to get Dog Images's URL
+	url, err := getRandomImageURL(req.GetName())
+	if err != nil {
+		err = fmt.Errorf("failed to call ImageAPI: %w", err)
+		log.Println(err)
+		return
+	}
+	log.Printf("Responded: %v", url)
+	res.Message = url
+	return res, nil
+}
+
+// GetFileSVCByte implements filesvc.FileSVCServer
+func (s *Server) GetFileSVCByte(ctx context.Context, req *pb.FileSVCRequest) (res *pb.FileSVCByteReply, err error) {
+	res = &pb.FileSVCByteReply{}
+
+	// Check request
+	if req == nil {
+		fmt.Println("request must not be nil")
+		err = fmt.Errorf("request must not be nil")
+		return
+	}
+
+	if req.Name == "" {
+		err = fmt.Errorf("name must not be empty in the request")
+		return
 	}
 
 	log.Printf("Received: %v", req.GetName())
 
-	//Call KuteGo API in order to get Dog Images's URL
-	response, err := http.Get(BaseAPI + fmt.Sprintf("/breed/%s/images", req.GetName()))
+	//Call Image API in order to get Dog Images's URL
+	url, err := getRandomImageURL(req.GetName())
+	log.Println(url, err)
+
 	if err != nil {
-		log.Fatalf("failed to call KuteGoAPI: %v", err)
+		err = fmt.Errorf("failed to call ImageAPI: %w", err)
+		log.Println(err)
+		return
 	}
-	defer response.Body.Close()
-
-	if response.StatusCode == 200 {
-		// Transform our response to a []byte
-		body, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			log.Fatalf("failed to read response body: %v", err)
-		}
-
-		// Put only needed informations of the JSON document in our array of Dog Images
-		var data APIResponse
-		err = json.Unmarshal(body, &data)
-		if err != nil {
-			log.Fatalf("failed to unmarshal JSON: %v", err)
-		}
-
-		// Create a string with all of the Dog Images's name and a blank line as separator
-		var stringData strings.Builder
-		for _, gopher := range data.Message {
-			stringData.WriteString(gopher + "\n")
-		}
-		res.Message = stringData.String()
-	} else {
-		log.Println("Can't get the Dog Images :-(")
+	imageData, _, err := getData(url)
+	if err != nil {
+		err = fmt.Errorf("can't get the Dog Images: %w", err)
+		log.Println(err)
+		return
 	}
-
-	return res, nil
+	log.Printf("Responded image data of : %v", url)
+	res.Message = imageData
+	return
 }

@@ -7,14 +7,22 @@ option go_package = "github.com/py-go/grpc-poc";
 service FileSVC {
   // Get FileSVC URL
   rpc GetFileSVC (FileSVCRequest) returns (FileSVCReply) {}
+  // Get GetFileSVCByte URL
+  rpc GetFileSVCByte (FileSVCRequest) returns (FileSVCByteReply) {}
+
 }
 
-// The request message containing the user's name.
+// The request message containing the breed name.
 message FileSVCRequest {
   string name = 1;
 }
 
-// The response message containing the greetings
+// The response message containing the image url
 message FileSVCReply {
   string message = 1;
+}
+
+// The response message containing the image byte string
+message FileSVCByteReply {
+  bytes message = 1;
 }

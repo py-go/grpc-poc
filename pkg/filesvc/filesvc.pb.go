@@ -24,7 +24,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// The request message containing the user's name.
+// The request message containing the breed name.
 type FileSVCRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -72,7 +72,7 @@ func (x *FileSVCRequest) GetName() string {
 	return ""
 }
 
-// The response message containing the greetings
+// The response message containing the image url
 type FileSVCReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -120,6 +120,54 @@ func (x *FileSVCReply) GetMessage() string {
 	return ""
 }
 
+// The response message containing the image byte string
+type FileSVCByteReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Message []byte `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+}
+
+func (x *FileSVCByteReply) Reset() {
+	*x = FileSVCByteReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pkg_filesvc_filesvc_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FileSVCByteReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileSVCByteReply) ProtoMessage() {}
+
+func (x *FileSVCByteReply) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_filesvc_filesvc_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileSVCByteReply.ProtoReflect.Descriptor instead.
+func (*FileSVCByteReply) Descriptor() ([]byte, []int) {
+	return file_pkg_filesvc_filesvc_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *FileSVCByteReply) GetMessage() []byte {
+	if x != nil {
+		return x.Message
+	}
+	return nil
+}
+
 var File_pkg_filesvc_filesvc_proto protoreflect.FileDescriptor
 
 var file_pkg_filesvc_filesvc_proto_rawDesc = []byte{
@@ -130,14 +178,21 @@ var file_pkg_filesvc_filesvc_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x28, 0x0a, 0x0c, 0x46, 0x69,
 	0x6c, 0x65, 0x53, 0x56, 0x43, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65,
 	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73,
-	0x73, 0x61, 0x67, 0x65, 0x32, 0x49, 0x0a, 0x07, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x12,
-	0x3e, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x12, 0x17, 0x2e,
-	0x66, 0x69, 0x6c, 0x65, 0x73, 0x76, 0x63, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x76, 0x63,
-	0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x42,
-	0x1b, 0x5a, 0x19, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x70, 0x79,
-	0x2d, 0x67, 0x6f, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2d, 0x70, 0x6f, 0x63, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x61, 0x67, 0x65, 0x22, 0x2c, 0x0a, 0x10, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x42,
+	0x79, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x32, 0x91, 0x01, 0x0a, 0x07, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x12, 0x3e,
+	0x0a, 0x0a, 0x47, 0x65, 0x74, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x12, 0x17, 0x2e, 0x66,
+	0x69, 0x6c, 0x65, 0x73, 0x76, 0x63, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x76, 0x63, 0x2e,
+	0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x12, 0x46,
+	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x42, 0x79, 0x74, 0x65,
+	0x12, 0x17, 0x2e, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x76, 0x63, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53,
+	0x56, 0x43, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x66, 0x69, 0x6c, 0x65,
+	0x73, 0x76, 0x63, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x56, 0x43, 0x42, 0x79, 0x74, 0x65, 0x52,
+	0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x42, 0x1b, 0x5a, 0x19, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x70, 0x79, 0x2d, 0x67, 0x6f, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2d,
+	0x70, 0x6f, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -152,16 +207,19 @@ func file_pkg_filesvc_filesvc_proto_rawDescGZIP() []byte {
 	return file_pkg_filesvc_filesvc_proto_rawDescData
 }
 
-var file_pkg_filesvc_filesvc_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_pkg_filesvc_filesvc_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_pkg_filesvc_filesvc_proto_goTypes = []interface{}{
-	(*FileSVCRequest)(nil), // 0: filesvc.FileSVCRequest
-	(*FileSVCReply)(nil),   // 1: filesvc.FileSVCReply
+	(*FileSVCRequest)(nil),   // 0: filesvc.FileSVCRequest
+	(*FileSVCReply)(nil),     // 1: filesvc.FileSVCReply
+	(*FileSVCByteReply)(nil), // 2: filesvc.FileSVCByteReply
 }
 var file_pkg_filesvc_filesvc_proto_depIdxs = []int32{
 	0, // 0: filesvc.FileSVC.GetFileSVC:input_type -> filesvc.FileSVCRequest
-	1, // 1: filesvc.FileSVC.GetFileSVC:output_type -> filesvc.FileSVCReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 1: filesvc.FileSVC.GetFileSVCByte:input_type -> filesvc.FileSVCRequest
+	1, // 2: filesvc.FileSVC.GetFileSVC:output_type -> filesvc.FileSVCReply
+	2, // 3: filesvc.FileSVC.GetFileSVCByte:output_type -> filesvc.FileSVCByteReply
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -197,6 +255,18 @@ func file_pkg_filesvc_filesvc_proto_init() {
 				return nil
 			}
 		}
+		file_pkg_filesvc_filesvc_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FileSVCByteReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -204,7 +274,7 @@ func file_pkg_filesvc_filesvc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pkg_filesvc_filesvc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -232,6 +302,8 @@ const _ = grpc.SupportPackageIsVersion6
 type FileSVCClient interface {
 	// Get FileSVC URL
 	GetFileSVC(ctx context.Context, in *FileSVCRequest, opts ...grpc.CallOption) (*FileSVCReply, error)
+	// Get GetFileSVCByte URL
+	GetFileSVCByte(ctx context.Context, in *FileSVCRequest, opts ...grpc.CallOption) (*FileSVCByteReply, error)
 }
 
 type fileSVCClient struct {
@@ -251,10 +323,21 @@ func (c *fileSVCClient) GetFileSVC(ctx context.Context, in *FileSVCRequest, opts
 	return out, nil
 }
 
+func (c *fileSVCClient) GetFileSVCByte(ctx context.Context, in *FileSVCRequest, opts ...grpc.CallOption) (*FileSVCByteReply, error) {
+	out := new(FileSVCByteReply)
+	err := c.cc.Invoke(ctx, "/filesvc.FileSVC/GetFileSVCByte", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FileSVCServer is the server API for FileSVC service.
 type FileSVCServer interface {
 	// Get FileSVC URL
 	GetFileSVC(context.Context, *FileSVCRequest) (*FileSVCReply, error)
+	// Get GetFileSVCByte URL
+	GetFileSVCByte(context.Context, *FileSVCRequest) (*FileSVCByteReply, error)
 }
 
 // UnimplementedFileSVCServer can be embedded to have forward compatible implementations.
@@ -263,6 +346,9 @@ type UnimplementedFileSVCServer struct {
 
 func (*UnimplementedFileSVCServer) GetFileSVC(context.Context, *FileSVCRequest) (*FileSVCReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFileSVC not implemented")
+}
+func (*UnimplementedFileSVCServer) GetFileSVCByte(context.Context, *FileSVCRequest) (*FileSVCByteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFileSVCByte not implemented")
 }
 
 func RegisterFileSVCServer(s *grpc.Server, srv FileSVCServer) {
@@ -287,6 +373,24 @@ func _FileSVC_GetFileSVC_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FileSVC_GetFileSVCByte_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileSVCRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileSVCServer).GetFileSVCByte(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/filesvc.FileSVC/GetFileSVCByte",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileSVCServer).GetFileSVCByte(ctx, req.(*FileSVCRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _FileSVC_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "filesvc.FileSVC",
 	HandlerType: (*FileSVCServer)(nil),
@@ -294,6 +398,10 @@ var _FileSVC_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFileSVC",
 			Handler:    _FileSVC_GetFileSVC_Handler,
+		},
+		{
+			MethodName: "GetFileSVCByte",
+			Handler:    _FileSVC_GetFileSVCByte_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

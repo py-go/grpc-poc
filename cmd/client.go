@@ -17,8 +17,10 @@ package cmd
 
 import (
 	"context"
+	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"google.golang.org/grpc"
@@ -54,13 +56,30 @@ var clientCmd = &cobra.Command{
 		if len(os.Args) > 2 {
 			name = os.Args[2]
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 		defer cancel()
-		r, err := client.GetFileSVC(ctx, &pb.FileSVCRequest{Name: name})
+		// r, err := client.GetFileSVC(ctx, &pb.FileSVCRequest{Name: name})
+		r, err := client.GetFileSVCByte(ctx, &pb.FileSVCRequest{Name: name})
+
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("URL: %s", r.GetMessage())
+		tmpfile, err := ioutil.TempFile("./images", "image.*.png")
+		destName := tmpfile.Name()
+		if err != nil {
+			log.Fatal(err)
+		}
+		// defer os.Remove(destName) // clean up
+		_, err = tmpfile.Write(r.GetMessage())
+		if err != nil {
+			log.Fatalf("could not save image: %v", err)
+		}
+		if err := tmpfile.Close(); err != nil {
+			log.Fatal(err)
+		}
+		fullpath, _ := filepath.Abs(destName)
+		log.Printf("images of %s is saved here: %s\n", name, fullpath)
+
 	},
 }
 
