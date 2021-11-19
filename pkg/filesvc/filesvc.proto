@@ -1,0 +1,20 @@
+syntax = "proto3";
+package filesvc;
+
+option go_package = "github.com/py-go/grpc-poc";
+
+// The filesvc service definition.
+service FileSVC {
+  // Get FileSVC URL
+  rpc GetFileSVC (FileSVCRequest) returns (FileSVCReply) {}
+}
+
+// The request message containing the user's name.
+message FileSVCRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message FileSVCReply {
+  string message = 1;
+}

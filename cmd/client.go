@@ -16,23 +16,51 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"context"
+	"log"
+	"os"
+	"time"
 
+	"google.golang.org/grpc"
+
+	pb "github.com/py-go/grpc-poc/pkg/filesvc"
 	"github.com/spf13/cobra"
+)
+
+const (
+	address     = "localhost:9000"
+	defaultName = "dr-who"
 )
 
 // clientCmd represents the client command
 var clientCmd = &cobra.Command{
 	Use:   "client",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Query the gRPC server",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("client called")
+		var conn *grpc.ClientConn
+		conn, err := grpc.Dial(address, grpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("did not connect: %s", err)
+		}
+		defer conn.Close()
+
+		client := pb.NewFileSVCClient(conn)
+
+		var name string
+
+		// Contact the server and print out its response.
+		// name := defaultName
+		if len(os.Args) > 2 {
+			name = os.Args[2]
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+		r, err := client.GetFileSVC(ctx, &pb.FileSVCRequest{Name: name})
+		if err != nil {
+			log.Fatalf("could not greet: %v", err)
+		}
+		log.Printf("URL: %s", r.GetMessage())
 	},
 }
 
