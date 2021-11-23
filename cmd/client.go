@@ -78,7 +78,7 @@ var clientCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 		fullpath, _ := filepath.Abs(destName)
-		log.Printf("images of %s is saved here: %s\n", name, fullpath)
+		log.Printf("image of %s is saved here: %s\n", name, fullpath)
 
 	},
 }
